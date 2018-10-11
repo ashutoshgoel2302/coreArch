@@ -31,3 +31,4 @@ D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\coreArch.dll
 D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\coreArch.pdb
 D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\coreArch.csproj.CopyComplete
 D:\coreArch\coreArch\bin\Debug\netcoreapp2.1\NLog.config
+D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\Razor\Views\Home\Create.g.cshtml.cs

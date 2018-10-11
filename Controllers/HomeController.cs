@@ -39,10 +39,21 @@ namespace coreArch.Controllers
             //logg.LogInformation("checking the logging");
             
             _logger.LogInformation("welcome Nlog");
-            var response = await SaveUser();
+            
+            var childList =await _apiClient.GetUsers();
+            return View(childList);
+        }
+        public IActionResult Create()
+        {
+           
             return View();
         }
-
+        [HttpPost]
+        public async Task<IActionResult> Create(Child model)
+        {
+            var response = await SaveUser(model);
+            return RedirectToAction("Index");
+        }
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -68,18 +79,18 @@ namespace coreArch.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<JsonResult> SaveUser()
+        public async Task<JsonResult> SaveUser(Child model)
         {
-            var model = new Child()
-            {
-                Id = 0,
-                FirstName = "jasmine",
-                LastName = "la rose",
-                Gender = "female",
-                Address = "los Angles",
-                BirthDate = DateTime.Now,
-                ChildType="Own"
-            };
+            //var model = new Child()
+            //{
+            //    Id = 0,
+            //    FirstName = "jasmine",
+            //    LastName = "la rose",
+            //    Gender = "female",
+            //    Address = "los Angles",
+            //    BirthDate = DateTime.Now,
+            //    ChildType="Own"
+            //};
             var response = await _apiClient.SaveUser(model);
             return Json(response);
         }

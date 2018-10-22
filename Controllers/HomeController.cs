@@ -8,50 +8,50 @@ using coreArch.Models;
 using CoreApiClient;
 using coreArch.Services;
 using Microsoft.Extensions.Logging;
+using coreArch.Repository;
+using coreArch.IRepository;
 
 namespace coreArch.Controllers
 {
-    
+
     public class HomeController : Controller
     {
-         //AngularContext _angularContext;
-       private readonly  IApiClient _apiClient;
 
-        // logging default by IloggerFactory
-     //   private ILoggerFactory _loggerFactory;
+        private readonly IApiClient _apiClient;
+        private readonly IApiClientRepository _apiClientRepository;
+
 
         private ILogger<HomeController> _logger;
 
         public HomeController(IApiClient apiClient,
-            //ILoggerFactory loggerFactory,
-            ILogger<HomeController> logger)
+
+            ILogger<HomeController> logger,
+            IApiClientRepository apiClientRepository
+            )
         {
-            // _angularContext = angularContext;
             _apiClient = apiClient;
-            //_loggerFactory = loggerFactory;
             _logger = logger;
+            _apiClientRepository = apiClientRepository;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            //var logg = _loggerFactory.CreateLogger("Log Category");
-            //logg.LogInformation("checking the logging");
-            
+
             _logger.LogInformation("welcome Nlog");
-            
-            var childList =await _apiClient.GetUsers();
+
+            var childList = await _apiClientRepository.GetUsers();
             return View(childList);
         }
         public IActionResult Create()
         {
-           
+
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Create(Child model)
         {
-            var response = await SaveUser(model);
+            var response = await _apiClientRepository.SaveUser(model);
             return RedirectToAction("Index");
         }
         public IActionResult About()
@@ -79,20 +79,32 @@ namespace coreArch.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<JsonResult> SaveUser(Child model)
+        
+        [HttpGet]
+        public async Task<IActionResult> Edit(Child child)
         {
-            //var model = new Child()
-            //{
-            //    Id = 0,
-            //    FirstName = "jasmine",
-            //    LastName = "la rose",
-            //    Gender = "female",
-            //    Address = "los Angles",
-            //    BirthDate = DateTime.Now,
-            //    ChildType="Own"
-            //};
-            var response = await _apiClient.SaveUser(model);
-            return Json(response);
+            var id = child.Id;
+            if(child.Id!=0)
+            {
+                
+                var childDetail =await _apiClientRepository.GetUserById(id);
+                return View(childDetail);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName("Edit")]
+        public async Task<IActionResult> EditDetail(Child model)
+        {
+            var response = await _apiClientRepository.UpdateUser(model);
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(Child model)
+        {
+            var response = await _apiClientRepository.DeleteUser(model);
+            return RedirectToAction("Index");
         }
     }
 }

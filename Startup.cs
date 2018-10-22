@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreApiClient;
+using coreArch.IRepository;
+using coreArch.Repository;
 using coreArch.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +39,7 @@ namespace coreArch
             });
 
             services.AddTransient<IApiClient,ApiClient>();
+            services.AddTransient<IApiClientRepository, ApiClientRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

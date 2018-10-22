@@ -18,10 +18,7 @@ namespace CoreApiClient
 
         public ApiClient()
         {
-            //if (baseEndpoint == null)
-            //{
-            //    throw new ArgumentNullException("baseEndpoint");
-            //}
+           
             BaseEndpoint = new Uri("http://localhost:61521/api/");
             _httpClient = new HttpClient();
         }
@@ -34,14 +31,37 @@ namespace CoreApiClient
             var data = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(data);
         }
+        public async Task<T> GetByIdAsync<T>(Uri requestUrl)
+        {
+            addHeaders();
+            var response = await _httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode();
+            var data = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(data);
+        }
 
-        /// <summary>
-        /// Common method for making POST calls
-        /// </summary>
+        public async Task<Message<T>> DeleteAsync<T>(Uri requestUrl)
+        {
+            addHeaders();
+            var response = await _httpClient.DeleteAsync(requestUrl.ToString());
+            response.EnsureSuccessStatusCode();
+            var data = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Message<T>>(data);
+        }
+      
         public async Task<Message<T>> PostAsync<T>(Uri requestUrl, T content)
         {
             addHeaders();
             var response = await _httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent<T>(content));
+            response.EnsureSuccessStatusCode();
+            var data = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Message<T>>(data);
+        }
+
+        public async Task<Message<T>> PutAsync<T>(Uri requestUrl, T content)
+        {
+            addHeaders();
+            var response = await _httpClient.PutAsync(requestUrl.ToString(), CreateHttpContent<T>(content));
             response.EnsureSuccessStatusCode();
             var data = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<Message<T>>(data);
@@ -93,12 +113,30 @@ namespace CoreApiClient
                 "Children"));
             return await GetAsync<List<Child>>(requestUrl);
         }
-
+        public async Task<Child> GetByIdUsers(int id)
+        {
+            var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "Children/"+id));
+            return await GetByIdAsync<Child>(requestUrl);
+        }
         public async Task<Message<Child>> SaveUser(Child model)
         {
             var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
                 "Children"));
             return await PostAsync<Child>(requestUrl, model);
+        }
+        public async Task<Message<Child>> UpdateUser(Child model)
+        {
+            var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "Children/"+model.Id));
+            return await PutAsync<Child>(requestUrl, model);
+        }
+
+        public async Task<Message<Child>> DeleteUser(Child model)
+        {
+            var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "Children/" + model.Id));
+            return await DeleteAsync<Child>(requestUrl);
         }
     }
 }

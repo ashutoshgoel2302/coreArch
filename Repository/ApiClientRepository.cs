@@ -1,5 +1,9 @@
 ﻿using AspCoreModels;
+using coreArch.IRepository;
 using coreArch.Models;
+using coreArch.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,28 +11,44 @@ using System.Threading.Tasks;
 
 namespace coreArch.Repository
 {
-    public class ApiClientRepository
+    public class ApiClientRepository: IApiClientRepository
     {
-        //public async Task<List<Child>> GetUsers()
-        //{
-        //    var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
-        //        "Children"));
-        //    return await GetAsync<List<Child>>(requestUrl);
-        //}
+        private readonly IApiClient _apiClient;
+        private ILogger<ApiClientRepository> _logger;
+        public ApiClientRepository(IApiClient apiClient,          
+           ILogger<ApiClientRepository> logger)
+        {
+            _apiClient = apiClient;
+            _logger = logger;
+        }
+       
+        public async Task<Message<Child>> SaveUser(Child model)
+        {
 
-        //public async Task<Message<Child>> SaveUser(Child model)
-        //{
-        //    var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
-        //        "Children"));
-        //    return await PostAsync<Child>(requestUrl, model);
-        //}
+            var response = await _apiClient.SaveUser(model);
+            return response;
+        }
+        public async Task<List<Child>> GetUsers()
+        {
 
-        //public Uri CreateRequestUri(string relativePath, string queryString = "")
-        //{
-        //    var endpoint = new Uri(BaseEndpoint, relativePath);
-        //    var uriBuilder = new UriBuilder(endpoint);
-        //    uriBuilder.Query = queryString;
-        //    return uriBuilder.Uri;
-        //}
+            var childList = await _apiClient.GetUsers();
+            return childList;
+        }
+        public async Task<Child> GetUserById(int id)
+        {
+
+            var child = await _apiClient.GetByIdUsers(id);
+            return child;
+        }
+        public async Task<Message<Child>> UpdateUser(Child model)
+        {
+            var response = await _apiClient.UpdateUser(model);
+            return response;
+        }
+        public async Task<Message<Child>> DeleteUser(Child model)
+        {
+            var response = await _apiClient.DeleteUser(model);
+            return response;
+        }
     }
 }

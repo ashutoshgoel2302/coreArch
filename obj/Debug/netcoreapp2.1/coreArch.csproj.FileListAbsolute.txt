@@ -1,4 +1,3 @@
-D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\coreArch.csprojAssemblyReference.cache
 D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\coreArch.csproj.CoreCompileInputs.cache
 D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\coreArch.RazorAssemblyInfo.cache
 D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\coreArch.RazorAssemblyInfo.cs
@@ -32,3 +31,4 @@ D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\coreArch.pdb
 D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\coreArch.csproj.CopyComplete
 D:\coreArch\coreArch\bin\Debug\netcoreapp2.1\NLog.config
 D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\Razor\Views\Home\Create.g.cshtml.cs
+D:\coreArch\coreArch\obj\Debug\netcoreapp2.1\Razor\Views\Home\Edit.g.cshtml.cs
